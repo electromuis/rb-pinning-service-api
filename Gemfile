@@ -25,7 +25,7 @@ gem 'jbuilder', '~> 2.7'
 # gem 'image_processing', '~> 1.2'
 
 gem 'ipfs-http-client', github: 'andrew/ipfs-http-client'
-gem 'pagy'
+gem 'pagy', '~> 3.11'
 gem 'dotenv-rails'
 gem 'sidekiq'
 gem 'foreman'
