@@ -241,6 +241,7 @@ DEPENDENCIES
   bootstrap
   chartkick
   cid!
+  connection_pool (~> 2.2)
   dotenv-rails
   foreman
   groupdate
@@ -254,6 +255,7 @@ DEPENDENCIES
   puma (~> 4.1)
   rails (~> 6.1)
   rails-controller-testing
+  redis (~> 4.6)
   sassc-rails
   sidekiq
   sprockets-rails

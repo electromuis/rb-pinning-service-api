@@ -28,6 +28,8 @@ gem 'ipfs-http-client', github: 'andrew/ipfs-http-client'
 gem 'pagy', '~> 3.11'
 gem 'dotenv-rails'
 gem 'sidekiq'
+gem 'redis', '~> 4.6' # Used for caching and Sidekiq.
+gem 'connection_pool', '~> 2.2'
 gem 'foreman'
 gem 'jquery-rails'
 gem 'bootstrap'
