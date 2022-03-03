@@ -4,7 +4,7 @@ require 'test_helper'
 class PinsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @user = User.create(email: 'test@foobar.com')
+    @user = User.create(email: 'test@foobar.com', storage_limit: 1.gigabytes)
   end
 
   test 'creates a pin' do

@@ -24,7 +24,7 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
-gem 'ipfs-http-client', github: 'andrew/ipfs-http-client'
+gem 'ipfs-http-client', github: 'VanwaTech/ipfs-http-client', branch: 'feature/files-stat'
 gem 'pagy', '~> 3.11'
 gem 'dotenv-rails'
 gem 'sidekiq'

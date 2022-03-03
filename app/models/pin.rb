@@ -40,11 +40,14 @@ class Pin < ApplicationRecord
   def ipfs_add
     begin
       update_columns(status: 'pinning') unless status == 'pinned'
+
       origins.each do |origin|
         ipfs_client.swarm_connect(origin)
       end
       ipfs_client.pin_add(cid)
-      update_columns(status: 'pinned')
+
+      update_columns(status: 'pinned', storage_size: find_storage_size)
+      user.update_used_storage(add: storage_size)
     rescue Ipfs::Commands::Error => e
       puts e
       # TODO record the exception somewhere
@@ -61,6 +64,7 @@ class Pin < ApplicationRecord
     begin
       ipfs_client.pin_rm(cid)
       update_columns(status: 'removed')
+      user.update_used_storage(remove: storage_size)
     rescue Ipfs::Commands::Error => e
       raise unless JSON.parse(e.message)['Code'] == 0
     end
@@ -73,5 +77,13 @@ class Pin < ApplicationRecord
 
   def mark_deleted
     update_columns(deleted_at: Time.zone.now)
+  end
+
+  private
+
+  # Note: Size of directory objects is 0, hence CumulativeSize is being used for them.
+  def find_storage_size
+    stat = ipfs_client.files_stat(cid)
+    stat.fetch('Type') == 'file' ? stat.fetch('Size') : stat.fetch('CumulativeSize')
   end
 end

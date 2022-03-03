@@ -1,5 +1,6 @@
 class Api::V1::PinsController < Api::V1::ApplicationController
   before_action :authenticate_user!
+  before_action :check_storage_limit, only: %i[create update]
 
   def index
     @limit = [1, params[:limit].to_i, 1000].sort[1]
@@ -59,6 +60,11 @@ class Api::V1::PinsController < Api::V1::ApplicationController
   end
 
   protected
+
+  def check_storage_limit
+    return unless current_user.storage_limit_reached?
+    handle_error(:forbidden, 'Storage limit reached')
+  end
 
   def pin_params
     params.permit(:cid, :name, :origins, :meta)
