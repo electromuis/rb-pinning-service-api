@@ -15,14 +15,16 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: [:new, :create, :destroy]
+  if ENV['API_ONLY'] == 'false'
+    resources :users, only: [:new, :create, :destroy]
 
-  get 'account', to: 'users#show', as: :account
-  get 'login', to: 'sessions#new'
-  post 'login', to: 'sessions#create'
-  get 'logout', to: 'sessions#destroy'
+    get 'account', to: 'users#show', as: :account
+    get 'login', to: 'sessions#new'
+    post 'login', to: 'sessions#create'
+    get 'logout', to: 'sessions#destroy'
 
-  resources :pins
+    resources :pins
 
-  root to: 'pins#index'
+    root to: 'pins#index'
+  end
 end

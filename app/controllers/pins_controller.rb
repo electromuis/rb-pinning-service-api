@@ -1,5 +1,6 @@
 class PinsController < ApplicationController
   before_action :authenticate_user!
+  before_action :check_storage_limit, only: %i[create update]
 
   def index
     @limit = [1, params[:limit].to_i, 1000].sort[1]
@@ -61,6 +62,13 @@ class PinsController < ApplicationController
   end
 
   protected
+
+  def check_storage_limit
+    return unless current_user.storage_limit_reached?
+    flash[:error] = 'Storage limit reached'
+    action = action_name.to_sym == :create ? :new : :edit
+    render action
+  end
 
   def pin_params
     params.require(:pin).permit(:cid, :name)
