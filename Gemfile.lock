@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/VanwaTech/ipfs-http-client.git
-  revision: acb3413e4a7fa39f6b2d1ece3b015ec7a53f0d5d
-  branch: feature/files-stat
+  revision: a00d3a94849083160b6bc92bd3e7e082cc276c33
   specs:
     ipfs-http-client (0.4.0)
       http (~> 4.4)
