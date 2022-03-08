@@ -1,15 +1,20 @@
-
 version: '3'
 services:
   app:
-    image: ipfsshipyard/rb-pinning-service-api:v0.1.0
+    build: .
+    image: rb-pinning-service-api:v0.2.0
     ports:
       - "5000:5000"
     environment:
-      - RAILS_ENV=development
-      - DATABASE_NAME=postgres
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=development
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - API_ONLY=${API_ONLY}
+      - TOKENS_CACHE_TTL=${TOKENS_CACHE_TTL}
+      - TOKENS_URL=${TOKENS_URL}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_HOST=database.service.pinning.internal
       - REDIS_URL=redis://redis.service.pinning.internal
       - IPFS_URL=ipfs.service.pinning.internal
@@ -21,16 +26,16 @@ services:
       - ipfs.service.pinning.internal
 
   database.service.pinning.internal:
-    image: postgres:9.6-alpine
+    image: postgres:14.2-alpine
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
       - internal
     environment:
-      - POSTGRES_PASSWORD=development
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
 
   redis.service.pinning.internal:
-    image: redis:6.0-alpine
+    image: redis:6.2-alpine
     networks:
       - internal
 
