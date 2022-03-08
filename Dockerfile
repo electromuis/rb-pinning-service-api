@@ -21,6 +21,7 @@ RUN apk add --update \
     postgresql-dev \
     tzdata \
     curl-dev \
+    libpq-dev \
  && rm -rf /var/cache/apk/* \
  && gem update --system \
  && gem install bundler foreman \
