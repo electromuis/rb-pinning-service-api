@@ -26,13 +26,13 @@ services:
       - ipfs.service.pinning.internal
 
   database.service.pinning.internal:
-    image: postgres:14.2-alpine
+    image: mysql:8.0.28
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
     networks:
       - internal
     environment:
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
 
   redis.service.pinning.internal:
     image: redis:6.2-alpine
@@ -50,7 +50,7 @@ services:
       - ./data/ipfs:/ipfsdata
 
 volumes:
-  pg_data:
+  mysql_data:
 
 networks:
   internal:

@@ -5,11 +5,19 @@ class Pin < ApplicationRecord
 
   scope :status, ->(statuses) { where(status: statuses) }
   scope :cids, ->(cids) { where(cid: cids) }
-  scope :name_contains, ->(name) { where('name ilike ?', "%#{name}%") }
+  scope :name_contains, ->(name) { where('lower(name) like ?', "%#{name.downcase}%") }
   scope :before, ->(before) { where('created_at < ?', before) }
   scope :after, ->(after) { where('created_at > ?', after) }
-  scope :meta, ->(meta) { where("meta->>? = ?", meta.first[0], meta.first[1]) }
+  scope :meta, ->(meta) do
+    # NOTE: Using sanitize_sql because interpolating with a placeholder causes a MySQL syntax error.
+    where(
+      "meta->>'$.#{ActiveRecord::Base.sanitize_sql(meta.first[0])}' = ?",
+      meta.first[1]
+    )
+  end
   scope :not_deleted, -> { where(deleted_at: nil) }
+
+  after_initialize :set_json_defaults
 
   before_create :check_inlined_cids
 
@@ -80,6 +88,12 @@ class Pin < ApplicationRecord
   end
 
   private
+
+  def set_json_defaults
+    self.origins ||= []
+    self.delegates ||= []
+    self.meta ||= {}
+  end
 
   # Note: Size of directory objects is 0, hence CumulativeSize is being used for them.
   def find_storage_size

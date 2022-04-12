@@ -12,16 +12,13 @@
 
 ActiveRecord::Schema.define(version: 2022_03_02_215117) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "pins", force: :cascade do |t|
+  create_table "pins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "cid", null: false
-    t.string "name", limit: 255
-    t.string "origins", default: [], array: true
-    t.jsonb "meta", default: {}, null: false
+    t.string "name"
+    t.json "origins"
+    t.json "meta"
     t.string "status", default: "queued"
-    t.string "delegates", default: [], array: true
+    t.json "delegates"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
@@ -29,7 +26,7 @@ ActiveRecord::Schema.define(version: 2022_03_02_215117) do
     t.bigint "storage_size"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "access_token", null: false
     t.string "email"
     t.datetime "created_at", precision: 6, null: false

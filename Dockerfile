@@ -18,7 +18,8 @@ RUN apk add --update \
     git \
     nodejs \
     linux-headers \
-    postgresql-dev \
+    mysql-client \
+    libmysqlclient-dev \
     tzdata \
     curl-dev \
     libpq-dev \
