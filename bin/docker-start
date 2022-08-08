@@ -2,7 +2,7 @@
 set -e
 
 db_host=${DATABASE_HOST:-database.service.pinning.internal}
-while ! nc -z $db_host ${DATABASE_PORT:-5432}; do
+while ! nc -z $db_host ${DATABASE_PORT:-3306}; do
   echo "Waiting for database to be available..."
   sleep 1
 done
