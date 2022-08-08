@@ -1,40 +1,17 @@
-FROM ruby:2.7.5-alpine
+FROM ruby:2.7.6
 
-ENV APP_ROOT /usr/src/app
-ENV DATABASE_PORT 5432
-WORKDIR $APP_ROOT
+ENV RAILS_ENV production
+ENV RAILS_LOG_TO_STDOUT true
+ENV RAILS_ROOT /opt/app
 
-# =============================================
-# System layer
+RUN mkdir -p $RAILS_ROOT
+WORKDIR $RAILS_ROOT
+COPY . .
 
-# Will invalidate cache as soon as the Gemfile changes
-COPY Gemfile Gemfile.lock $APP_ROOT/
-
-# * Setup system
-# * Install Ruby dependencies
-RUN apk add --update \
-    build-base \
-    netcat-openbsd \
-    git \
-    nodejs \
-    linux-headers \
-    mysql-client \
-    libmysqlclient-dev \
-    tzdata \
-    curl-dev \
-    libpq-dev \
- && rm -rf /var/cache/apk/* \
- && gem update --system \
- && gem install bundler foreman \
- && bundle config --global frozen 1 \
- && bundle config set without 'test' \
- && bundle install --jobs 2
-
-# ========================================================
-# Application layer
-
-# Copy application code
-COPY . $APP_ROOT
+RUN apt-get update && apt-get install -y default-libmysqlclient-dev netcat nodejs
+RUN gem install bundler --no-document
+RUN bundle config set without 'development test'
+RUN bundle check || bundle install
 
 # Precompile assets for a production environment.
 # This is done to include assets in production images on Dockerhub.
