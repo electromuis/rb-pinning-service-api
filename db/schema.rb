@@ -12,21 +12,24 @@
 
 ActiveRecord::Schema.define(version: 2022_03_02_215117) do
 
-  create_table "pins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "pins", charset: "utf8mb4", force: :cascade do |t|
     t.string "cid", null: false
     t.string "name"
-    t.json "origins"
-    t.json "meta"
+    t.text "origins", size: :long, collation: "utf8mb4_bin"
+    t.text "meta", size: :long, collation: "utf8mb4_bin"
     t.string "status", default: "queued"
-    t.json "delegates"
+    t.text "delegates", size: :long, collation: "utf8mb4_bin"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
     t.integer "user_id", null: false
     t.bigint "storage_size"
+    t.check_constraint "json_valid(`delegates`)", name: "delegates"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`origins`)", name: "origins"
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "access_token", null: false
     t.string "email"
     t.datetime "created_at", precision: 6, null: false

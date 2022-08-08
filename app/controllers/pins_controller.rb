@@ -13,7 +13,7 @@ class PinsController < ApplicationController
     @scope = @scope.cids(params[:cid].split(',')) if params[:cid].present?
     @scope = @scope.before(params[:before]) if params[:before].present?
     @scope = @scope.after(params[:after]) if params[:after].present?
-    @scope = @scope.meta(JSON.parse(params[:meta])) if params[:meta].present?
+    @scope = @scope.where(meta: JSON.parse(params[:meta])) if params[:meta].present?
 
     @count = @scope.count
     @pagy, @pins = pagy(@scope, per: @limit)

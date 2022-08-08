@@ -1,5 +1,10 @@
 class Pin < ApplicationRecord
   STATUSES = ["queued", "pinning", "pinned", "failed", "removed"]
+
+  serialize :delegates, JSON
+  serialize :meta, JSON
+  serialize :origins, JSON
+
   validates_presence_of :cid
   validates :status, inclusion: { in: STATUSES }
 
@@ -8,13 +13,6 @@ class Pin < ApplicationRecord
   scope :name_contains, ->(name) { where('lower(name) like ?', "%#{name.downcase}%") }
   scope :before, ->(before) { where('created_at < ?', before) }
   scope :after, ->(after) { where('created_at > ?', after) }
-  scope :meta, ->(meta) do
-    # NOTE: Using sanitize_sql because interpolating with a placeholder causes a MySQL syntax error.
-    where(
-      "meta->>'$.#{ActiveRecord::Base.sanitize_sql(meta.first[0])}' = ?",
-      meta.first[1]
-    )
-  end
   scope :not_deleted, -> { where(deleted_at: nil) }
 
   after_initialize :set_json_defaults
