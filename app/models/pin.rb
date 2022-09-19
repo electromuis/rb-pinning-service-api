@@ -1,9 +1,10 @@
 class Pin < ApplicationRecord
   STATUSES = ["queued", "pinning", "pinned", "failed", "removed"]
 
-  serialize :delegates, JSON
-  serialize :meta, JSON
-  serialize :origins, JSON
+  #not needed with modens mysql
+  #serialize :delegates, JSON
+  #serialize :meta, JSON
+  #serialize :origins, JSON
 
   validates_presence_of :cid
   validates :status, inclusion: { in: STATUSES }
